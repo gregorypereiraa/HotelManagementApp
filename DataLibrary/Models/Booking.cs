@@ -7,7 +7,6 @@ public class Booking : BaseEntity
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
     public bool CheckedIn { get; set; }
-
     public double Cost
     {
         get
@@ -18,9 +17,12 @@ public class Booking : BaseEntity
         }
     }
 
-    public int RoomsId { get; set; }
+    #region ForeignKey
+
+    public int RoomId { get; set; }
     public Room Room { get; set; }
-    
     public int GuestId { get; set; }
     public Guest Guest { get; set; }
+
+    #endregion
 }

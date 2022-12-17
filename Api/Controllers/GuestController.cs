@@ -1,4 +1,5 @@
-﻿using DataLibrary.Models;
+﻿using DataLibrary.Dtos.Guest;
+using DataLibrary.Models;
 using DataLibrary.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,9 +24,23 @@ public class GuestController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] Guest guest)
+    public async Task<ActionResult> Post([FromBody] GuestEntryDto guest)
     {
         await _guestService.CreateAsync(guest);
+        return NoContent();
+    }
+    
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        await _guestService.DeleteAsync(id);
+        return NoContent();
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult> Put(int id, [FromBody] GuestEntryDto guest)
+    {
+        await _guestService.UpdateAsync(id, guest);
         return NoContent();
     }
 }

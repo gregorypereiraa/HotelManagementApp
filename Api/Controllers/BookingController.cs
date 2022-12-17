@@ -29,4 +29,17 @@ public class BookingController : ControllerBase
         await _bookingService.CreateAsync(booking);
         return NoContent();
     }
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        await _bookingService.DeleteAsync(id);
+        return NoContent();
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult> Put(int id, [FromBody] BookingEntryDto booking)
+    {
+        await _bookingService.UpdateAsync(id, booking);
+        return NoContent();
+    }
 }

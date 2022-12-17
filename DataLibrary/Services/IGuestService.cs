@@ -1,9 +1,12 @@
-﻿using DataLibrary.Models;
+﻿using DataLibrary.Dtos.Guest;
+using DataLibrary.Models;
 
 namespace DataLibrary.Services;
 
 public interface IGuestService
 {
-    Task<IEnumerable<Guest>> GetAllAsync();
-    Task CreateAsync(Guest guest);
+    Task<IEnumerable<GuestDto>> GetAllAsync();
+    Task CreateAsync(GuestEntryDto guest);
+    Task DeleteAsync(int id);
+    Task UpdateAsync(int id, GuestEntryDto room);
 }

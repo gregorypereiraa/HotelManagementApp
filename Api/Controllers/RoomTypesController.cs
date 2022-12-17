@@ -1,4 +1,5 @@
-﻿using DataLibrary.Models;
+﻿using DataLibrary.Dtos.RoomType;
+using DataLibrary.Models;
 using DataLibrary.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,9 +24,24 @@ public class RoomTypesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] RoomType roomType)
+    public async Task<ActionResult> Post([FromBody] RoomTypeEntryDto roomType)
     {
         await _roomTypesService.CreateAsync(roomType);
         return NoContent();
     }
+
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        await _roomTypesService.DeleteAsync(id);
+        return NoContent();
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult> Put(int id, [FromBody] RoomTypeEntryDto roomType)
+    {
+        await _roomTypesService.UpdateAsync(id, roomType);
+        return NoContent();
+    }
+
 }

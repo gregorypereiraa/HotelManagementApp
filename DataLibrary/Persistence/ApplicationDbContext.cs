@@ -17,6 +17,7 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Booking>().Ignore(x => x.Cost);
+        modelBuilder.Entity<Booking>()
+            .Ignore(x => x.Cost);
     }
 }

@@ -37,5 +37,31 @@ public class RoomService : IRoomService
         _db.Rooms.Add(entry);
         await _db.SaveChangesAsync();
     }
+
+    public async Task DeleteAsync(int id)
+    {
+        var room = await _db.Rooms.FindAsync(new object[] {id});
+        if (room is null)
+        {
+            throw new Exception();
+        }
+        
+        _db.Rooms.Remove(room);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(int id,RoomEntryDto room)
+    {
+        var entity = await _db.Rooms.FindAsync(new object[] {id});
+        if (entity is null)
+        {
+            throw new Exception();
+        }
+
+        entity.RoomTypeId = room.RoomTypeId;
+        entity.RoomNumber = room.RoomNumber;
+        _db.Rooms.Update(entity);
+        await _db.SaveChangesAsync();
+    }
 }
     

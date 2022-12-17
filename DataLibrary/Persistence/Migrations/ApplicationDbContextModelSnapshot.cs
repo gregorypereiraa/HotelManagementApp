@@ -42,9 +42,6 @@ namespace DataLibrary.Persistence.Migrations
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoomsId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Start")
                         .HasColumnType("datetime2");
 
@@ -107,7 +104,7 @@ namespace DataLibrary.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Descritption")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -126,13 +123,13 @@ namespace DataLibrary.Persistence.Migrations
             modelBuilder.Entity("DataLibrary.Models.Booking", b =>
                 {
                     b.HasOne("DataLibrary.Models.Guest", "Guest")
-                        .WithMany()
+                        .WithMany("Bookings")
                         .HasForeignKey("GuestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DataLibrary.Models.Room", "Room")
-                        .WithMany()
+                        .WithMany("Bookings")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -145,12 +142,27 @@ namespace DataLibrary.Persistence.Migrations
             modelBuilder.Entity("DataLibrary.Models.Room", b =>
                 {
                     b.HasOne("DataLibrary.Models.RoomType", "RoomType")
-                        .WithMany()
+                        .WithMany("Rooms")
                         .HasForeignKey("RoomTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("RoomType");
+                });
+
+            modelBuilder.Entity("DataLibrary.Models.Guest", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
+            modelBuilder.Entity("DataLibrary.Models.Room", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
+            modelBuilder.Entity("DataLibrary.Models.RoomType", b =>
+                {
+                    b.Navigation("Rooms");
                 });
 #pragma warning restore 612, 618
         }

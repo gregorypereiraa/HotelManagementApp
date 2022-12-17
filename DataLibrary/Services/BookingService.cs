@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataLibrary.Dtos.Booking;
+using DataLibrary.Dtos.Guest;
 using DataLibrary.Models;
 using DataLibrary.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ public class BookingService : IBookingService
         var bookings = await _db.Bookings
             .Include(x => x.Room)
             .ThenInclude(x => x.RoomType)
+            .Include(x => x.Guest)
             .ToListAsync();
 
         var bookingsDto = bookings.Select(x => _mapper.Map<BookingDto>(x));
@@ -35,11 +37,39 @@ public class BookingService : IBookingService
         {
             Start = booking.Start,
             End = booking.End,
-            RoomsId = booking.RoomId,
+            RoomId = booking.RoomId,
             GuestId = booking.GuestId
-
         };
+        
         _db.Bookings.Add(entry);
+        await _db.SaveChangesAsync();
+    }
+    
+    public async Task DeleteAsync(int id)
+    {
+        var booking = await _db.Bookings.FindAsync(new object[] {id});
+        if (booking is null)
+        {
+            throw new Exception();
+        }
+        
+        _db.Bookings.Remove(booking);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(int id,BookingEntryDto booking)
+    {
+        var entity = await _db.Bookings.FindAsync(new object[] {id});
+        if (entity is null)
+        {
+            throw new Exception();
+        }
+
+        entity.Start =booking.Start;
+        entity.End = booking.End;
+        entity.RoomId = booking.RoomId;
+        entity.GuestId = booking.GuestId;
+        _db.Bookings.Update(entity);
         await _db.SaveChangesAsync();
     }
 }

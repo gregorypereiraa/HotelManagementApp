@@ -29,4 +29,18 @@ public class RoomController : ControllerBase
         await _roomService.CreateAsync(room);
         return NoContent();
     }
+    
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        await _roomService.DeleteAsync(id);
+        return NoContent();
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult> Put(int id, [FromBody] RoomEntryDto room)
+    {
+        await _roomService.UpdateAsync(id, room);
+        return NoContent();
+    }
 }
