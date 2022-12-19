@@ -4,8 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLibrary", "DataLibrary\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{56FEF52D-DD86-41F8-86EB-637208365988}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebPortal", "WebPortal\WebPortal.csproj", "{4A1942E2-84C0-480B-AE4A-95C6C659A2E7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,9 +18,5 @@ Global
 		{56FEF52D-DD86-41F8-86EB-637208365988}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56FEF52D-DD86-41F8-86EB-637208365988}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56FEF52D-DD86-41F8-86EB-637208365988}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A1942E2-84C0-480B-AE4A-95C6C659A2E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A1942E2-84C0-480B-AE4A-95C6C659A2E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A1942E2-84C0-480B-AE4A-95C6C659A2E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A1942E2-84C0-480B-AE4A-95C6C659A2E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
