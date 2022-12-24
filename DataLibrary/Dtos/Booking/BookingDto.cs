@@ -1,6 +1,5 @@
 ﻿using DataLibrary.Dtos.Guest;
 using DataLibrary.Dtos.Room;
-using DataLibrary.Models;
 
 namespace DataLibrary.Dtos.Booking;
 

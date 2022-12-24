@@ -8,6 +8,6 @@ public class Guest : BaseEntity
     #region ForeignKey
 
     public IList<Booking> Bookings { get; set; } = new List<Booking>();
-    
+
     #endregion
 }

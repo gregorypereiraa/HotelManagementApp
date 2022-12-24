@@ -1,5 +1,4 @@
 ﻿using DataLibrary.Dtos.Room;
-using DataLibrary.Models;
 using DataLibrary.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +28,7 @@ public class RoomController : ControllerBase
         await _roomService.CreateAsync(room);
         return NoContent();
     }
-    
+
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id)
     {
@@ -42,5 +41,12 @@ public class RoomController : ControllerBase
     {
         await _roomService.UpdateAsync(id, room);
         return NoContent();
+    }
+
+    [HttpGet("Available/{from:datetime}/{to:datetime}")]
+    public async Task<ActionResult> GetAvailable(DateTime from, DateTime to)
+    {
+        var roomsAvailable = await _roomService.GetRoomAvailableAsync(from, to);
+        return Ok(roomsAvailable);
     }
 }

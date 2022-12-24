@@ -1,5 +1,4 @@
 ﻿using DataLibrary.Dtos.Booking;
-using DataLibrary.Models;
 using DataLibrary.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +28,7 @@ public class BookingController : ControllerBase
         await _bookingService.CreateAsync(booking);
         return NoContent();
     }
+
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id)
     {

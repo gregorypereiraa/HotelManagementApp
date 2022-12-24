@@ -11,7 +11,7 @@ public class RoomTypesService : IRoomTypesService
     private readonly ApplicationDbContext _db;
     private readonly IMapper _mapper;
 
-    public RoomTypesService(ApplicationDbContext db,IMapper mapper)
+    public RoomTypesService(ApplicationDbContext db, IMapper mapper)
     {
         _db = db;
         _mapper = mapper;
@@ -24,49 +24,42 @@ public class RoomTypesService : IRoomTypesService
         return roomTypesDto;
     }
 
-    public async Task<RoomType?> GetById(int id)
-    {
-        var roomType = await _db.RoomTypes.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
-        return roomType;
-    }
-    
     public async Task CreateAsync(RoomTypeEntryDto roomType)
     {
-        var entry = new RoomType()
+        var entry = new RoomType
         {
             Title = roomType.Title,
             Description = roomType.Description,
             Price = roomType.Price
-
         };
-         _db.RoomTypes.Add(entry);
-         await _db.SaveChangesAsync();
+        _db.RoomTypes.Add(entry);
+        await _db.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int id)
     {
-        var roomType = await _db.RoomTypes.FindAsync(new object[] {id});
-        if (roomType is null)
-        {
-            throw new Exception();
-        }
-        
+        var roomType = await _db.RoomTypes.FindAsync(id);
+        if (roomType is null) throw new Exception();
+
         _db.RoomTypes.Remove(roomType);
         await _db.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(int id,RoomTypeEntryDto roomType)
+    public async Task UpdateAsync(int id, RoomTypeEntryDto roomType)
     {
-        var entity = await _db.RoomTypes.FindAsync(new object[] {id});
-        if (entity is null)
-        {
-            throw new Exception();
-        }
+        var entity = await _db.RoomTypes.FindAsync(id);
+        if (entity is null) throw new Exception();
 
         entity.Title = roomType.Title;
         entity.Description = roomType.Description;
         entity.Price = roomType.Price;
         _db.RoomTypes.Update(entity);
         await _db.SaveChangesAsync();
+    }
+
+    public async Task<RoomType?> GetById(int id)
+    {
+        var roomType = await _db.RoomTypes.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
+        return roomType;
     }
 }

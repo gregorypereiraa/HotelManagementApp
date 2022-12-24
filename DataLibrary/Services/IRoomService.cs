@@ -1,5 +1,4 @@
 ﻿using DataLibrary.Dtos.Room;
-using DataLibrary.Models;
 
 namespace DataLibrary.Services;
 
@@ -9,4 +8,5 @@ public interface IRoomService
     Task CreateAsync(RoomEntryDto room);
     Task DeleteAsync(int id);
     Task UpdateAsync(int id, RoomEntryDto room);
+    Task<IEnumerable<RoomDto>> GetRoomAvailableAsync(DateTime from, DateTime to);
 }

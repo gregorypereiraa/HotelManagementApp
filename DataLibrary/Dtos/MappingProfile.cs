@@ -11,7 +11,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Models.Room, RoomDto>();
-        CreateMap<Models.Booking,BookingDto>();
+        CreateMap<Models.Booking, BookingDto>();
         CreateMap<Models.RoomType, RoomTypeDto>();
         CreateMap<Models.Guest, GuestDto>();
     }

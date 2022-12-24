@@ -1,6 +1,4 @@
-﻿using System.Data.SqlTypes;
-
-namespace DataLibrary.Models;
+﻿namespace DataLibrary.Models;
 
 public class RoomType : BaseEntity
 {
@@ -10,7 +8,7 @@ public class RoomType : BaseEntity
 
     #region ForeignKey
 
-    public IList<Room>Rooms { get; set; }
-    
+    public IList<Room> Rooms { get; set; }
+
     #endregion
 }

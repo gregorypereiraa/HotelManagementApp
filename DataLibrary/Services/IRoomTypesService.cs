@@ -1,5 +1,4 @@
 ﻿using DataLibrary.Dtos.RoomType;
-using DataLibrary.Models;
 
 namespace DataLibrary.Services;
 

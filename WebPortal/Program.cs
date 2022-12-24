@@ -1,13 +1,17 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using WebPortal.Data;
+using WebPortal.EndPoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+builder.Services.AddHttpClient("Default", option => { option.BaseAddress = new Uri("https://localhost:7255/"); });
+
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddTransient<IRoomTypeEndPoints, RoomTypeEndPoints>();
+builder.Services.AddTransient<IRoomEndPoints, RoomEndPoints>();
 
 var app = builder.Build();
 

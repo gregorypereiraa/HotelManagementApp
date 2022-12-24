@@ -1,6 +1,4 @@
-﻿using DataLibrary.Models;
-
-namespace DataLibrary.Dtos.Room;
+﻿namespace DataLibrary.Dtos.Room;
 
 public class RoomDto
 {

@@ -1,5 +1,4 @@
 ﻿using DataLibrary.Dtos.Guest;
-using DataLibrary.Models;
 using DataLibrary.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +28,7 @@ public class GuestController : ControllerBase
         await _guestService.CreateAsync(guest);
         return NoContent();
     }
-    
+
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id)
     {

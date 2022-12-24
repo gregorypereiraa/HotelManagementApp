@@ -1,5 +1,4 @@
 ﻿using DataLibrary.Dtos.RoomType;
-using DataLibrary.Models;
 using DataLibrary.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,5 +42,4 @@ public class RoomTypesController : ControllerBase
         await _roomTypesService.UpdateAsync(id, roomType);
         return NoContent();
     }
-
 }
