@@ -4,8 +4,9 @@
 @using DataLibrary.Dtos.RoomType
 @inject IRoomTypeEndPoints RoomTypeEndPoints;
 @inject IRoomEndPoints RoomEndPoints;
+@inject NavigationManager _Navigation;
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Hotel Management</PageTitle>
 
 <div class="flex justify-center my-4">
     <div class="bg-white p-12 rounded">
@@ -43,9 +44,10 @@
     <div class="flex justify-center mt-3">
         <InputSelect @bind-Value="_selection.RoomTypeId" id="RoomType" name="RoomType" class="w-64  mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
             <option value="0"selected>Room Type</option>
-            @foreach (var rt in _roomTypeAvailable)
+
+            @foreach (var rt in _roomTypeAvailable.OrderBy(i => i.Item1.Price))
             {
-                <option value="@rt.Item1.Id">@($"{rt.Item1.Title} - {rt.Item1.Price}$ - {rt.Item2} available ")</option>
+                <option disabled="@(rt.Item2 == 0)" value="@rt.Item1.Id">@($"{rt.Item1.Title} - {rt.Item1.Price}$ - {rt.Item2} available ")</option>
             }
         </InputSelect>
     </div>
@@ -53,6 +55,7 @@
     @if (_selection.RoomTypeId != default)
     {
         var roomType = _roomTypes.First(x => x.Id == _selection.RoomTypeId);
+        GetRoomId();
 
         <div class="flex justify-center">
             <div>
@@ -74,6 +77,7 @@
     private readonly BookingSelectionModel _selection = new();
     private IEnumerable<RoomTypeDto> _roomTypes = Enumerable.Empty<RoomTypeDto>();
     private List<(RoomTypeDto,int)> _roomTypeAvailable = new();
+    private int _roomId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -87,6 +91,7 @@
     private void HandleValidSubmit(EditContext obj)
     {
         Console.WriteLine(obj);
+        _Navigation.NavigateTo($"/Booking/{_roomId}/{_selection.RoomTypeId}/{_selection.CheckIn:yyyy-MM-ddTHH:mm:ssZ}/{_selection.CheckOut:yyyy-MM-ddTHH:mm:ssZ}");
     }
 
     private void HandleInValidSubmit(EditContext obj)
@@ -106,6 +111,8 @@
         {
             await UpdateRoomTypes();
         }
+
+        GetRoomId();
     }
 
     private async Task OnCheckoutChanged(DateTime arg)
@@ -116,6 +123,8 @@
         {
             await UpdateRoomTypes();
         }
+
+        GetRoomId();
     }
 
     private async Task UpdateRoomTypes()
@@ -134,5 +143,18 @@
     private bool ShouldUpdateRoomTypes()
     {
         return true;
+    }
+
+    protected async Task GetRoomId()
+    {
+        var rooms = await RoomEndPoints.GetRoomAvailableAsync(_selection.CheckIn, _selection.CheckOut);
+        rooms.ToList();
+        foreach (var room in rooms)
+        {
+            if (room.RoomTypeId == _selection.RoomTypeId)
+            {
+                _roomId = room.Id;
+            }
+        }
     }
 }

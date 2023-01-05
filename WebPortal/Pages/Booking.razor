@@ -1,0 +1,217 @@
+﻿@page "/Booking/{RoomId:int}/{RoomTypeId:int}/{CheckIn:datetime}/{CheckOut:datetime}"
+@using WebPortal.EndPoints
+@using WebPortal.Models
+@using DataLibrary.Dtos.Guest
+@using DataLibrary.Dtos.Booking
+@inject IGuestEndPoints GuestEndPoints;
+@inject IBookingEndPoints BookingEndPoints;
+@inject NavigationManager _Navigation;
+@inject IRoomTypeEndPoints RoomTypeEndPoints;
+@inject IRoomEndPoints RoomEndPoints;
+
+<PageTitle>Hotel Management</PageTitle>
+
+@if (_bookingSuccess)
+{
+    <div class="flex justify-center my-4">
+        <div class="bg-white p-12 rounded">
+            <div class="text-center">
+                <h2 class="text-lg font-semibold text-indigo-600">Greg's app</h2>
+                <p class="mt-1 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">Welcome to our lovely hotel</p>
+                <p class="mx-auto mt-5 max-w-xl text-xl text-gray-500">Thanks for booking your next trip with us</p>
+            </div>
+        </div>
+    </div>
+    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:px-6">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Booking informations</h3>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">Personal details</p>
+        </div>
+        <div class="border-t border-gray-200">
+            <dl>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Full name</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">@($"{_register.FirstName} {_register.LastName}")</dd>
+                </div>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Email address</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">@_register.EmailAdress</dd>
+                </div>
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Phone Number</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">@_register.Phone</dd>
+                </div>
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Check-in/Check-out</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">@($"{CheckIn.ToString("MMMM dd")} to {CheckOut.ToString("MMMM dd, yyyy")} for a total of {CheckOut.Day - CheckIn.Day} nights")</dd>
+                </div>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Price for the room per night</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">@($"{_roomTypePrice} $")</dd>
+                </div>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Total price booking</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">@($"{_bookingPrice} $")</dd>
+                </div>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">RoomNumber</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">@($"{_roomNumber}")</dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+
+    <div class="mt-4 ml-3">
+        <button onclick="@(() => { _Navigation.NavigateTo("/"); })" class="justify-center bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Home page</button>
+    </div>
+}
+else
+{
+    <div class="flex justify-center my-4">
+        <div class="bg-white p-12 rounded">
+            <div class="text-center">
+                <h2 class="text-lg font-semibold text-indigo-600">Greg's app</h2>
+                <p class="mt-1 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">Welcome to our lovely hotel</p>
+                <p class="mx-auto mt-5 max-w-xl text-xl text-gray-500">Start booking your next trip with us</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-lg shadow-xl">
+        <div class="flex ">
+            <div class="text-gray-600 text-sm font-medium tracking-wide uppercase">
+                Check-in
+            </div>
+
+            <div class="ml-2 text-gray-600 text-sm font-medium tracking-wide uppercase">
+                @CheckIn.ToString("MMMM dd, yyyy")
+            </div>
+        </div>
+        <div class="flex ">
+            <div class="text-gray-600 text-sm font-medium tracking-wide uppercase">
+                Check-out
+            </div>
+            <div class="ml-2 text-gray-600 text-sm font-medium tracking-wide uppercase">
+                @CheckOut.ToString("MMMM dd, yyyy")
+            </div>
+        </div>
+    </div>
+    <EditForm Model="@_register" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInValidSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+        <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:p-6">
+            <div class="md:grid md:grid-cols-3 md:gap-6">
+                <div class="md:col-span-1">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Personal Information</h3>
+                    <p class="mt-1 text-sm text-gray-500">Use a permanent address where you can receive mail.</p>
+                </div>
+                <div class="mt-5 md:col-span-2 md:mt-0">
+                    <div class="grid grid-cols-6 gap-6">
+                        <div class="col-span-6 sm:col-span-3">
+                            <label for="first-name" class="block text-sm font-medium text-gray-700">First name</label>
+                            <InputText @bind-Value="_register.FirstName" type="text"name="first-name" id="first-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></InputText>
+                        </div>
+
+                        <div class="col-span-6 sm:col-span-3">
+                            <label for="last-name" class="block text-sm font-medium text-gray-700">Last name</label>
+                            <InputText @bind-Value="_register.LastName"type="text" name="last-name" id="last-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></InputText>
+                        </div>
+
+                        <div class="col-span-6 sm:col-span-4">
+                            <label for="email-address" class="block text-sm font-medium text-gray-700">Email address</label>
+                            <InputText @bind-Value="_register.EmailAdress"type="text" name="email-address" id="email-address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></InputText>
+                        </div>
+
+
+                        <div class="col-span-6">
+                            <label for="Phone-Number" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                            <InputText type="text" @bind-Value="_register.Phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></InputText>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center mt-3">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+            </div>
+        </div>
+    </EditForm>
+
+
+    <div class="mt-4 ml-3">
+        <button onclick="@(() => { _Navigation.NavigateTo("/"); })" class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back</button>
+    </div>
+}
+
+
+
+@code {
+    bool _bookingSuccess;
+    int _roomNumber;
+    double _roomTypePrice;
+    double _bookingPrice;
+    public int GuestId;
+
+
+    [Parameter]
+    public int RoomId { get; set; }
+
+    [Parameter]
+    public int RoomTypeId { get; set; }
+
+    [Parameter]
+    public DateTime CheckIn { get; set; }
+
+    [Parameter]
+    public DateTime CheckOut { get; set; }
+
+
+    private GuestEntryDto _guestEntryDto = new();
+    private BookingEntryDto _bookingEntryDto = new();
+    private readonly BookingRegisterModel _register = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _roomNumber = await GetRoomNumber(RoomId);
+        _roomTypePrice = await GetRoomTypePrice(RoomTypeId);
+        GetBookingPrice();
+    }
+
+    private async Task HandleValidSubmit(EditContext obj)
+    {
+        Console.WriteLine(obj);
+        _guestEntryDto = new GuestEntryDto {FirstName = _register.FirstName, LastName = _register.LastName};
+        GuestId = await GuestEndPoints.CreateGuest(_guestEntryDto);
+
+        _bookingEntryDto = new BookingEntryDto {GuestId = GuestId, Start = CheckIn, End = CheckOut, RoomId = RoomId};
+        await BookingEndPoints.CreateBooking(_bookingEntryDto);
+        _bookingSuccess = true;
+    }
+
+    private void HandleInValidSubmit(EditContext obj)
+    {
+        Console.WriteLine(obj);
+    }
+    
+
+    private async Task<double> GetRoomTypePrice(int id)
+    {
+        var rt = await RoomTypeEndPoints.GetRoomTypesAsync();
+        return rt.First(x => x.Id == id).Price;
+    }
+
+    private async Task<int> GetRoomNumber(int id)
+    {
+        var rooms = await RoomEndPoints.GetRoomAvailableAsync(CheckIn, CheckOut);
+        return rooms.First(x => x.Id == id).RoomNumber;
+    }
+
+    private void GetBookingPrice()
+    {
+        var diff = CheckOut - CheckIn;
+        var ticksPerDay = TimeSpan.FromDays(1).Ticks;
+        _bookingPrice = diff.Ticks / ticksPerDay * _roomTypePrice;
+    }
+
+}

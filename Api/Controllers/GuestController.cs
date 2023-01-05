@@ -23,10 +23,10 @@ public class GuestController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] GuestEntryDto guest)
+    public async Task<ActionResult<int>> Post([FromBody] GuestEntryDto guest)
     {
-        await _guestService.CreateAsync(guest);
-        return NoContent();
+        var id = await _guestService.CreateAsync(guest);
+        return Ok(id);
     }
 
     [HttpDelete("{id:int}")]

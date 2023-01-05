@@ -62,7 +62,7 @@ public class RoomService : IRoomService
     {
         var rooms = await _db.Rooms.ToListAsync();
         var bookedRooms = await _db.Bookings
-            .Where(x => (x.Start < from && x.End > from) || (x.Start > to && x.End < to))
+            .Where(x => (x.Start >= from && x.Start < to) || (x.End > from && x.End <= to))
             .Select(x => x.RoomId)
             .ToListAsync();
 

@@ -25,15 +25,18 @@ public class GuestService : IGuestService
         return guestsDto;
     }
 
-    public async Task CreateAsync(GuestEntryDto guest)
+    public async Task<int> CreateAsync(GuestEntryDto guest)
     {
         var entry = new Guest
         {
             FirstName = guest.FirstName,
             LastName = guest.LastName
         };
+
         _db.Guests.Add(entry);
         await _db.SaveChangesAsync();
+
+        return entry.Id;
     }
 
     public async Task DeleteAsync(int id)

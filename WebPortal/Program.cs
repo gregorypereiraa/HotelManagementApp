@@ -12,6 +12,8 @@ builder.Services.AddHttpClient("Default", option => { option.BaseAddress = new U
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddTransient<IRoomTypeEndPoints, RoomTypeEndPoints>();
 builder.Services.AddTransient<IRoomEndPoints, RoomEndPoints>();
+builder.Services.AddTransient<IGuestEndPoints, GuestEndPoints>();
+builder.Services.AddTransient<IBookingEndPoints, BookingEndPoints>();
 
 var app = builder.Build();
 
